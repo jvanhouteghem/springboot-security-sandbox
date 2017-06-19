@@ -7,7 +7,33 @@
 - When logged in you will see a Whitelabel Error Page.
 
 1. Create a custom (hardcoded) user
+
 - Open application.properties and add the folowing lines : 
 security.user.name=jo
 security.user.password=pass
 - Restart and try new credential
+
+2. Create a new security configuration
+
+```
+@Configuration
+@EnableGlobalMethodSecurity(securedEnabled = true)
+public class SecurityConfig extends WebSecurityConfigurerAdapter{
+
+}
+```
+
+3. Add new controller
+
+```
+@RestController
+@RequestMapping("/post")
+public class CustomController {
+
+	@RequestMapping("/list")
+	public String list(){
+		return "list posts...";
+	}
+	
+}
+```
