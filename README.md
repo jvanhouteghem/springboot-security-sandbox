@@ -37,3 +37,42 @@ public class CustomController {
 	
 }
 ```
+
+4. Add custom admin and user
+```
+@Configuration
+@EnableGlobalMethodSecurity(securedEnabled = true)
+public class SecurityConfig extends WebSecurityConfigurerAdapter{
+	
+	@Autowired
+	public void configureAuth(AuthenticationManagerBuilder auth) throws Exception {
+		auth
+			.inMemoryAuthentication()
+				.withUser("admin")
+				.password("admin")
+				.roles("ADMIN")
+			.and()
+				.withUser("user")
+				.password("user")
+				.roles("USER");
+	}
+
+}
+```
+
+5. Override configure
+```
+	protected void configure(HttpSecurity http) throws Exception{
+		http
+			.authorizeRequests()
+				.antMatchers("/post/list").permitAll()
+				.antMatchers("/admin/**").hasRole("ADMIN")
+				.anyRequest().authenticated()
+				.and()
+			.formLogin()
+				.and()
+			.logout();
+	}
+	
+Log in with user/user and load http://localhost:8080/admin : access is denied
+```
